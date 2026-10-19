@@ -1,0 +1,29 @@
+# All of Create dedicated server. Copy .env.example to .env and edit it first.
+name: all-of-create
+
+services:
+  aoc:
+    build:
+      context: .
+    image: all-of-create-server:2.6
+    container_name: all-of-create
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      # You must accept https://aka.ms/MinecraftEULA yourself: set EULA=TRUE in .env
+      EULA: ${EULA:-FALSE}
+      MEMORY: ${MEMORY:-8G}
+    ports:
+      - "${BIND_ADDRESS:-0.0.0.0}:${SERVER_PORT:-25565}:25565"
+    volumes:
+      - ./data:/data
+    # Heap (MEMORY) + metaspace/native/threads for ~200 mods. Keep ~1.5-2G above MEMORY.
+    mem_limit: ${MEM_LIMIT:-10g}
+    # Time for the JVM shutdown hook to save all dimensions before SIGKILL.
+    stop_grace_period: 2m
+    stop_signal: SIGTERM
+    # Lets `docker attach all-of-create` send console commands (detach: Ctrl-p Ctrl-q).
+    stdin_open: true
+    tty: false
