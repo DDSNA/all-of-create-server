@@ -12,7 +12,8 @@ cd /home/debian/all-of-create-server
 cp .env.example .env
 $EDITOR .env                 # read https://aka.ms/MinecraftEULA and set EULA=TRUE if you accept it; set MEMORY
 mkdir -p data                # must exist and be owned by uid 1000 before first start
-docker compose build         # or: docker build -t all-of-create-server:2.6 .
+docker compose pull          # prebuilt image from ghcr.io/ddsna/all-of-create-server
+                             # (or build it yourself: docker compose build)
 docker compose up -d
 docker compose logs -f       # wait for: Done (..s)! For help, type "help"
 ```
@@ -29,6 +30,19 @@ Console:
 Stop with `docker compose stop` (or `down`). tini passes SIGTERM to the entrypoint,
 which types `stop` into the server console. You then see `Saving worlds` …
 `All dimensions are saved` in the logs, and the process exits with code 0. `stop_grace_period` is 2m.
+
+## Prebuilt image
+
+`.github/workflows/image.yml` builds every push to `main` and publishes it to
+GitHub Container Registry with three tags: the pack version, `latest` and
+`sha-<commit>`:
+
+```bash
+docker pull ghcr.io/ddsna/all-of-create-server:2.6
+```
+
+Pull requests are built but not pushed. Set `IMAGE=` in `.env` to pin a
+different tag, or a local build such as `IMAGE=all-of-create-server:dev`.
 
 ## What lives where
 

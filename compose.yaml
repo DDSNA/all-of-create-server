@@ -5,7 +5,7 @@ services:
   aoc:
     build:
       context: .
-    image: all-of-create-server:2.6
+    image: ${IMAGE:-ghcr.io/ddsna/all-of-create-server:2.6}
     container_name: all-of-create
     restart: unless-stopped
     env_file:
