@@ -44,6 +44,14 @@ docker pull ghcr.io/ddsna/all-of-create-server:2.6
 Pull requests are built but not pushed. Set `IMAGE=` in `.env` to pin a
 different tag, or a local build such as `IMAGE=all-of-create-server:dev`.
 
+## Compose example (no clone)
+
+[`examples/docker-compose.yml`](examples/docker-compose.yml) is a single,
+self-contained file that uses the prebuilt image, with settings inline
+instead of in `.env`. Copy it into an empty folder, set `EULA: "TRUE"` if you
+accept the Minecraft EULA, then run `docker compose up -d`. Data lands in
+`./data` beside it.
+
 ## What lives where
 
 | Path | Owner | On upgrade |

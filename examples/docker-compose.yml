@@ -1,0 +1,37 @@
+# Standalone example: no clone or build needed. Copy this file into an empty
+# folder, read the EULA line, then:
+#
+#   docker compose up -d && docker compose logs -f   # wait for "Done (..s)!"
+#   docker compose stop                              # clean save, then stop
+#
+# World, configs, mods and logs persist in ./data next to this file.
+name: all-of-create
+
+services:
+  aoc:
+    image: ghcr.io/ddsna/all-of-create-server:2.6   # or :latest
+    container_name: all-of-create
+    restart: unless-stopped
+    ports:
+      - "25565:25565"
+    volumes:
+      - ./data:/data
+    environment:
+      # You must accept https://aka.ms/MinecraftEULA yourself: change to TRUE.
+      EULA: "FALSE"
+      MEMORY: "8G"                  # Java heap; 6G works for a few players
+      MOTD: "All of Create"
+      DIFFICULTY: "normal"          # peaceful | easy | normal | hard
+      MAX_PLAYERS: "10"
+      VIEW_DISTANCE: "10"
+      SIMULATION_DISTANCE: "8"
+      ONLINE_MODE: "true"           # keep true unless you know why not
+      # ENABLE_WHITELIST: "true"
+      # WHITELIST: "player1,player2"
+      # OPS: "player1"
+      # RCON_PASSWORD: "change-me"  # enables RCON on 25575 (not published)
+    # Heap + ~2G for metaspace and native memory with ~200 mods.
+    mem_limit: 10g
+    # Time for the server to save every dimension before Docker kills it.
+    stop_grace_period: 2m
+    stdin_open: true                # docker attach all-of-create (detach: Ctrl-p Ctrl-q)
